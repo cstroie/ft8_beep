@@ -5,15 +5,18 @@ message="31406523206525375302663656440000141031406523005647637036327064356726122
 
 # use https://github.com/louisabraham/beep on macos
 
-base_freq = 1000
+import random
+base_freq = 1400 + random.randrange(200, 2500)
 
 tone_spacing = 6.25
 keying_rate = 6.25
+duration = 1/keying_rate
 
 print("#!/bin/sh")
-print("beep ", end='')
+print("play -q -n ", end='')
+synths = []
 for code in message:
     tone = int(code)
     freq = base_freq + (tone * tone_spacing)
-    print(f" -n -f {freq} -l {(1/keying_rate)*1000} -d 0 -D 0", end='')
-print()
+    synths.append("synth {duration} sine {freq}".format(duration = duration, freq = freq))
+print(" : ".join(synths))
